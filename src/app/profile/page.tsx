@@ -7,7 +7,7 @@ export default function Profile() {
   const router = useRouter();
   
   React.useEffect(() => {
-    router.replace("/signUp");
+    router.replace("/register");
   }, []);
 
   return <div>page</div>;

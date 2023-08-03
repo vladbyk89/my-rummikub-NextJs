@@ -8,8 +8,8 @@ connect();
 
 export async function POST(req: NextRequest) {
   try {
-    const { userName, email, password } = await req.json();
-    console.log(userName, email, password);
+    const { username, email, password } = await req.json();
+    console.log(username, email, password);
     const user = await User.findOne({ email });
 
     if (user) {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     //Create and save new user to DB
     const newUser = await User.create({
-      userName,
+      username,
       email,
       password: hashPassword,
     });
