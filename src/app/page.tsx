@@ -10,7 +10,7 @@ export default function Home() {
       <Link href="/profile" className="absolute top-0 right-0 m-4">
         <Icon icon="ei:user" className="text-5xl"/>
       </Link>
-      <button type="button" className="buttonStyleOne">
+      <button className="buttonStyleOne">
         Play Now
       </button>
     </main>

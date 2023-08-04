@@ -1,12 +1,6 @@
-"use client";
-
-import Link from "next/link";
-import { useState } from "react";
 import Form from "./Form";
 
 export default function Register() {
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
     <main>
       <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
@@ -25,25 +19,7 @@ export default function Register() {
               />
             </svg>
           </div>
-          {isLoading ? (
-            <h1 className="text-black text-center text-2xl">Processing...</h1>
-          ) : (
-            <>
-              <h2 className="text-center text-2xl font-bold leading-tight text-black">
-                Sign up to create account
-              </h2>
-              <p className="mt-2 text-center text-base text-gray-600">
-                Already have an account?{" "}
-                <Link
-                  href="/login"
-                  className="font-medium text-black transition-all duration-200 hover:underline"
-                >
-                  Sign-In
-                </Link>
-              </p>
-            </>
-          )}
-          <Form setIsLoading={setIsLoading} />
+          <Form />
           <div className="mt-3 space-y-3">
             <button
               type="button"
