@@ -1,7 +1,27 @@
-import React from "react";
+"use client";
+import React, { FormEvent, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
+  const sendResetPasswordEmail = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log("sendEmail");
+    const { data } = await axios.post("/api/users/resetPassword/sendEmail", {
+      email,
+    });
+    if (!data.ok) {
+      setEmailError(true);
+    } else {
+      setEmailSent(true);
+    }
+  };
+
   return (
     <main className="antialiased bg-slate-200 h-full flex justify-center items-center">
       <div className="max-w-lg mx-auto  bg-white p-8 rounded-xl shadow shadow-slate-300">
@@ -10,7 +30,7 @@ export default function ForgotPassword() {
           Fill in your email to reset the password
         </p>
 
-        <form className="my-10">
+        <form onSubmit={sendResetPasswordEmail} className="my-10">
           <div className="flex flex-col space-y-5">
             <label htmlFor="email">
               <p className="font-medium text-slate-700 pb-2">Email address</p>
@@ -20,10 +40,17 @@ export default function ForgotPassword() {
                 type="email"
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Enter email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
 
-            <button className="w-full py-3 font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow inline-flex space-x-2 items-center justify-center">
+            <button
+              disabled={email.length < 8 && true}
+              className={`w-full py-3 font-medium text-white bg-indigo-600  rounded-lg border-indigo-500 ${
+                email.length > 8 && "hover:shadow hover:bg-indigo-500"
+              } inline-flex space-x-2 items-center justify-center`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -66,6 +93,8 @@ export default function ForgotPassword() {
                 </span>
               </Link>
             </p>
+            {emailError && <h6>Email does not exist in system</h6>}
+            {emailSent && <h6>Check your email!</h6>}
           </div>
         </form>
       </div>

@@ -31,10 +31,6 @@ export default function Login() {
     }
   };
 
-  const handleForgotPasswordClick = () => {
-    console.log("handleForgotPasswordClick()");
-  };
-
   useEffect(() => {
     if (user.email.length > 5 && user.password.length > 5) {
       setButtonDisabled(false);
