@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     });
 
     //send email
-    // await sendEmail({ email, emailType: "VERIFY", userId: newUser._id });
+    await sendEmail({ email, emailType: "VERIFY", userId: newUser._id });
 
     return NextResponse.json({
       message: "User created succefully",

@@ -12,7 +12,7 @@ export default async function getDataFromToken(req: NextRequest) {
   try {
     const getToken = req.cookies.get("token");
 
-    if (!getToken) return { message: "No token found" };
+    if (!getToken) return
     const encodedToken = getToken.value;
 
     const decodedToken = jwt.verify(

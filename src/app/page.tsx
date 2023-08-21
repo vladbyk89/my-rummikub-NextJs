@@ -1,18 +1,11 @@
-"use client";
-
-import Link from "next/link";
 import "./styles/Buttons.scss";
-import { Icon } from "@iconify/react";
+import ProfileLink from "@/components/Home/ProfileLink";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="w-full h-full flex justify-center items-center bg-center bg-no-repeat bg-cover bg-main">
-      <Link href="/profile" className="absolute top-0 right-0 m-4">
-        <Icon icon="ei:user" className="text-5xl"/>
-      </Link>
-      <button className="buttonStyleOne">
-        Play Now
-      </button>
+      <ProfileLink />
+      <button className="buttonStyleOne">Play Now</button>
     </main>
   );
 }
