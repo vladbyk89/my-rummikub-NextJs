@@ -33,6 +33,11 @@
     border-right: 1px solid red;
     width: 80%;
     height: 100%;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1rem;
   }
   .actionButtons {
     height: 100%;
@@ -48,4 +53,19 @@
 .gameBoard {
   border: 1px solid black;
   grid-area: 1 / 2 / 9 / 12;
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+  padding: 5px;
+  div {
+    border: 1px solid black;
+  }
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
