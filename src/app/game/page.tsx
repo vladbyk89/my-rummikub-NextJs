@@ -20,55 +20,37 @@ import {
 } from "@/redux/features/deck/deckSlice";
 import { useEffect, useState } from "react";
 import { selectPlayers } from "@/redux/features/players/playersSlice";
+import { createPlayer, selectGame } from "@/redux/features/game/gameSlice";
 
 // ** Types
 import { PlayerType } from "@/redux/features/players/playersSlice";
 
 export default function GamePage() {
+  // ** use state
+  const [activePlayer, setActivePlayer] = useState({ userName: "", hand: [] });
+
   // Hooks
   const dispatch = useAppDispatch();
   const deckStore = useAppSelector(selectdeck);
   const playersStore = useAppSelector(selectPlayers);
-
-  // Use State
-  const [players, setPlayers] = useState<PlayerType>({
-    userName: "vladb89",
-    hand: [],
-  });
-
-  const createPlayerHand = (deck: JSX.Element[]) => {
-    const playersHand = [];
-
-    for (let i = 0; i < 14; i++) {
-      const randomDeckIndex = Math.floor(Math.random() * deck.length);
-
-      const tile = deck.at(randomDeckIndex) as JSX.Element;
-
-      playersHand.push(tile);
-
-      dispatch(removeTileFromDeck(randomDeckIndex));
-    }
-
-    return playersHand;
-  };
+  const gameStore = useAppSelector(selectGame);
 
   useEffect(() => {
-    setPlayers(
-      (prev) => (prev = { ...prev, hand: createPlayerHand(deckStore) })
-    );
-    console.log(createPlayerHand(deckStore));
+    console.log("check");
+    dispatch(createPlayer({ userName: "vladb89" }));
+
   }, []);
 
   return (
     <main className="gamePage">
       <section className="playersArea">
-        <div></div>
+        <div>{gameStore.players[0].userName}</div>
         <div></div>
         <div></div>
       </section>
       <DndProvider backend={HTML5Backend}>
         <section className="playerHand">
-          <div className="tiles">{players.hand}</div>
+          <div className="tiles">{gameStore.players[0].hand}</div>
           <div className="actionButtons">
             <button className="buttonStyleTwo">123</button>
             <button className="buttonStyleTwo">777</button>
