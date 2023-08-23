@@ -1,15 +1,21 @@
 import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
 
-type PlayerType = {
+export interface PlayerType {
   userName: string;
+  hand: JSX.Element[];
 };
 
-interface SliceType {
+interface StateStype {
   value: PlayerType[];
 }
 
-const initialState: SliceType = {
+const initPlayerOne: PlayerType = {
+  userName: "vladb89",
+  hand: []
+};
+
+const initialState: StateStype = {
   value: [],
 };
 

@@ -20,7 +20,6 @@ export const board = createSlice({
     moveTile: (state, action) => {
       const { squareIndex, newDiv } = action.payload;
       state.value[squareIndex] = newDiv;
-      //   console.log(state.value[squareIndex]);
     },
   },
 });

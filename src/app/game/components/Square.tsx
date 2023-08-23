@@ -2,6 +2,7 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
 import { moveTile } from "@/redux/features/board/boardSlice";
+import { removeTileFromDeck } from "@/redux/features/deck/deckSlice";
 import { TileType } from "./Tile";
 
 interface SquareProps {
@@ -28,6 +29,7 @@ export default function Square({ index }: SquareProps) {
           ),
         })
       );
+      dispatch(removeTileFromDeck(33));
     },
 
     collect: (monitor) => ({
