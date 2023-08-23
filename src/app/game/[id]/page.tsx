@@ -1,10 +1,6 @@
-import "../styles/GamePage.scss";
+import "../../styles/GamePage.scss";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function page({ params }: { params: { id: string } }) {
   return (
     <main className="gamePage">
       <section className="playersArea">
@@ -12,7 +8,7 @@ export default function DashboardLayout({
         <div></div>
         <div></div>
       </section>
-      <section className="gameBoard">{children}</section>
+      <section className="gameBoard">{params.id}</section>
       <section className="playerHand"></section>
     </main>
   );

@@ -23,7 +23,7 @@ export const players = createSlice({
   },
 });
 
-export const {} = players.actions;
+export const { initiatePlayers } = players.actions;
 
 export const selectPlayers = (state: RootState) => state.players.value;
 

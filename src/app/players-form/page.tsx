@@ -1,6 +1,9 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { useAppDispatch } from "@/redux/hooks";
+import { initiatePlayers } from "@/redux/features/players/playersSlice";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   playerOne: string;
@@ -10,6 +13,9 @@ interface FormData {
 }
 
 export default function PlayersForm() {
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [players, setPlayers] = useState<FormData>({
     playerOne: "",
@@ -20,11 +26,16 @@ export default function PlayersForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(e);
+
+    const playersArr = Object.values(players).filter((val) => val != "");
+
+    dispatch(initiatePlayers(playersArr));
+
+    router.push("/game")
   };
 
   return (
-    <form className="p-12 max-w-lg" onSubmit={(e) => handleSubmit(e)}>
+    <form className="p-12 max-w-lg" onSubmit={handleSubmit}>
       <label
         htmlFor="playerOne"
         className=" text-base font-medium text-gray-900"
@@ -34,6 +45,13 @@ export default function PlayersForm() {
           className="flex h-10 w-full m-2 rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-black"
           id="playerOne"
           name="playerOne"
+          required
+          value={players.playerOne}
+          onChange={(e) =>
+            setPlayers(
+              (prev) => (prev = { ...prev, playerOne: e.target.value })
+            )
+          }
         />
       </label>
       <label
@@ -45,6 +63,13 @@ export default function PlayersForm() {
           className="flex h-10 w-full m-2 rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-black"
           id="playerTwo"
           name="playerTwo"
+          required
+          value={players.playerTwo}
+          onChange={(e) =>
+            setPlayers(
+              (prev) => (prev = { ...prev, playerTwo: e.target.value })
+            )
+          }
         />
       </label>
       <label
@@ -56,6 +81,12 @@ export default function PlayersForm() {
           className="flex h-10 w-full m-2 rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-black"
           id="playerThree"
           name="playerThree"
+          value={players.playerThree}
+          onChange={(e) =>
+            setPlayers(
+              (prev) => (prev = { ...prev, playerThree: e.target.value })
+            )
+          }
         />
       </label>
       <label
@@ -67,6 +98,12 @@ export default function PlayersForm() {
           className="flex h-10 w-full m-2 rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-black"
           id="playerFour"
           name="playerFour"
+          value={players.playerFour}
+          onChange={(e) =>
+            setPlayers(
+              (prev) => (prev = { ...prev, playerFour: e.target.value })
+            )
+          }
         />
       </label>
       <button
