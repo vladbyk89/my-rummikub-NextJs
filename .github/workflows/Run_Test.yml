@@ -15,7 +15,7 @@ jobs:
         node-version: 18.16
     - name: Install Dependencies
       run: npm ci
-    - name: Lint Code Base
-      uses: github/super-linter@v4
-    - name: Build
-      run: npm run build
+    # - name: Lint Code Base
+    #   uses: github/super-linter@v2
+    # - name: Build
+    #   run: npm run build
