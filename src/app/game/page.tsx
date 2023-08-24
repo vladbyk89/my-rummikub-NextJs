@@ -36,15 +36,21 @@ export default function GamePage() {
   const gameStore = useAppSelector(selectGame);
 
   useEffect(() => {
-    console.log("check");
     dispatch(createPlayer({ userName: "vladb89" }));
-
   }, []);
 
   return (
     <main className="gamePage">
       <section className="playersArea">
-        <div>{gameStore.players[0].userName}</div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {gameStore.players[0].userName}
+        </div>
         <div></div>
         <div></div>
       </section>

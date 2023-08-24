@@ -83,6 +83,14 @@ export const game = createSlice({
 
       state.players = [player];
     },
+    removeTileFromDeck: (state, action) => {
+      const index = action.payload;
+      state.deck.splice(index, 1);
+    },
+    moveTile: (state, action) => {
+      const { squareIndex, tile } = action.payload;
+      state.board[squareIndex] = tile;
+    },
   },
 });
 
