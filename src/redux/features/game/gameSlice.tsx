@@ -53,7 +53,10 @@ const createEmptyBoard = () => {
   return boardArr;
 };
 
-const initStateBoard = createEmptyBoard();
+const initStateBoard = {
+  startTurn: createEmptyBoard(),
+  endTurn: createEmptyBoard(),
+};
 
 const createHand = (deck: JSX.Element[]): JSX.Element[] => {
   const newHand = [];
@@ -90,7 +93,7 @@ const findTileIndexInHand = (state: GameType, tileId: string) => {
 };
 
 const findTileIndexOnBoard = (state: GameType, tileId: string) => {
-  return state.board.findIndex((item) => item.key === tileId);
+  return state.board.endTurn.findIndex((item) => item.key === tileId);
 };
 
 const moveTileFromHandToBoard = (
@@ -101,7 +104,7 @@ const moveTileFromHandToBoard = (
   const index = findTileIndexInHand(state, tileId);
   const tile = state.activePlayer.hand.endHand[index];
   state.activePlayer.hand.endHand.splice(index, 1);
-  state.board[boardIndex] = tile;
+  state.board.endTurn[boardIndex] = tile;
 };
 
 const moveTileOnBoard = (
@@ -110,9 +113,9 @@ const moveTileOnBoard = (
   boardIndex: number
 ) => {
   const index = findTileIndexOnBoard(state, tileId);
-  const tile = state.board[index];
-  state.board[boardIndex] = tile;
-  state.board[index] = <Square index={index} key={index} />;
+  const tile = state.board.endTurn[index];
+  state.board.endTurn[boardIndex] = tile;
+  state.board.endTurn[index] = <Square index={index} key={index} />;
 };
 
 const getNextPlayer = (players: PlayerType[], activePlayerIndex: number) => {
@@ -139,7 +142,10 @@ const playerMadeAMove = (state: GameType) => {
 
 interface GameType {
   deck: JSX.Element[];
-  board: JSX.Element[];
+  board: {
+    startTurn: JSX.Element[];
+    endTurn: JSX.Element[];
+  };
   players: PlayerType[];
   activePlayer: PlayerType;
 }
@@ -202,8 +208,8 @@ export const game = createSlice({
         return alert("Not your tile to take");
 
       const index = findTileIndexOnBoard(state, tileId);
-      const tile = state.board[index];
-      state.board[index] = <Square index={index} key={index} />;
+      const tile = state.board.endTurn[index];
+      state.board.endTurn[index] = <Square index={index} key={index} />;
       state.activePlayer.hand.endHand.push(tile);
     },
     endActivePlayerTurn: (state) => {
@@ -221,17 +227,40 @@ export const game = createSlice({
       saveActivePlayer(state, activePlayerIndex);
 
       state.activePlayer = getNextPlayer(state.players, activePlayerIndex);
+      state.board.startTurn = state.board.endTurn;
+    },
+    resetHand: (state) => {
+      state.activePlayer.hand.endHand = state.activePlayer.hand.startHand;
+      state.board.endTurn = state.board.startTurn;
+    },
+    arrangeByGroup: (state) => {
+      state.activePlayer.hand.endHand.sort((a, b) => {
+        return a.props.value - b.props.value;
+      });
+    },
+    arrangeByColor: (state) => {
+      // first sotring by number
+      state.activePlayer.hand.endHand.sort((a, b) => {
+        return a.props.value - b.props.value;
+      });
+
+      // then by color to create ordered hand
+      state.activePlayer.hand.endHand.sort((a, b) => {
+        const colorA = a.props.color;
+        const colorB = b.props.color;
+        if (colorA > colorB) {
+          return -1;
+        }
+        if (colorA < colorB) {
+          return 1;
+        }
+        return 0;
+      });
     },
   },
 });
 
-export const {
-  createGame,
-  removeTileFromDeck,
-  moveTile,
-  moveFromBoardToHand,
-  endActivePlayerTurn,
-} = game.actions;
+export const gameActions = game.actions;
 
 export const selectGame = (state: RootState) => state.game;
 

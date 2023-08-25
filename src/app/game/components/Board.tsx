@@ -5,5 +5,5 @@ import { useAppSelector } from "@/redux/hooks";
 export default function Board() {
   const { board } = useAppSelector(selectGame);
 
-  return <section className="gameBoard">{board}</section>;
+  return <section className="gameBoard">{board.endTurn}</section>;
 }

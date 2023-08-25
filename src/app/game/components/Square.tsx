@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
-import { moveTile } from "@/redux/features/game/gameSlice";
+import { gameActions } from "@/redux/features/game/gameSlice";
 import { TileType } from "./Tile";
 
 interface SquareProps {
@@ -15,7 +15,7 @@ export default function Square({ index }: SquareProps) {
     accept: "tile",
     drop: (tile: TileType) => {
       dispatch(
-        moveTile({
+        gameActions.moveTile({
           squareIndex: index,
           tileId: tile.id,
         })

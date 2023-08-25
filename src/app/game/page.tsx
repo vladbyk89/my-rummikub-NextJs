@@ -17,7 +17,7 @@ import PlayersSection from "./components/PlayersArea";
 // ** redux
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect } from "react";
-import { selectGame, createGame } from "@/redux/features/game/gameSlice";
+import { selectGame, gameActions } from "@/redux/features/game/gameSlice";
 
 // ** Types
 import ActivePlayerSection from "./components/ActivePlayerSection";
@@ -30,7 +30,7 @@ export default function GamePage() {
   useEffect(() => {
     if (players.length == 0) {
       const fakePlayers = ["vladb89", "riri96", "ollie21"];
-      dispatch(createGame(fakePlayers));
+      dispatch(gameActions.createGame(fakePlayers));
     }
   }, []);
 
