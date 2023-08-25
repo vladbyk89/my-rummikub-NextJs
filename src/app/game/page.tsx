@@ -25,6 +25,7 @@ import {
 
 // ** Types
 import { PlayerType } from "@/redux/features/players/playersSlice";
+import ActivePlayerSection from "./components/ActivePlayerSection";
 
 export default function GamePage() {
   // Hooks
@@ -48,17 +49,7 @@ export default function GamePage() {
     <main className="gamePage">
       <PlayerSection />
       <DndProvider backend={HTML5Backend}>
-        <section className="playerHand">
-          <div className="tiles">
-            {activePlayer ? activePlayer.hand : <>Loading...</>}
-          </div>
-          <div className="actionButtons">
-            <button className="buttonStyleTwo">123</button>
-            <button className="buttonStyleTwo">777</button>
-            <button className="buttonStyleTwo">RESET</button>
-            <button className="buttonStyleTwo">End turn</button>
-          </div>
-        </section>
+        <ActivePlayerSection activePlayer={activePlayer} />
         <Board />
       </DndProvider>
     </main>

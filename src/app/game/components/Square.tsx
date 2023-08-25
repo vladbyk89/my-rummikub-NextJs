@@ -1,11 +1,8 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
-import {
-  moveTile,
-  removeTileFromPlayerHand,
-} from "@/redux/features/game/gameSlice";
-import Tile, { TileType } from "./Tile";
+import { moveTile } from "@/redux/features/game/gameSlice";
+import { TileType } from "./Tile";
 
 interface SquareProps {
   index: number;
@@ -30,5 +27,12 @@ export default function Square({ index }: SquareProps) {
     }),
   }));
 
-  return <div ref={drop} id={String(index)} className="square"></div>;
+  return (
+    <div
+      ref={drop}
+      id={String(index)}
+      className="square"
+      style={{ backgroundColor: isOver ? "yellow" : "pink" }}
+    ></div>
+  );
 }
