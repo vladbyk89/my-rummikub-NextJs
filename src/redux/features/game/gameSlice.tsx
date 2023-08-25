@@ -18,16 +18,14 @@ const createDeck = () => {
       const jockerId = uuidv4();
 
       const jocker = (
-        <Tile key={deck.length} value={0} color="purpel" id={jockerId} />
+        <Tile key={jockerId} value={0} color="purpel" id={jockerId} />
       );
       deck.push(jocker);
 
       colors.forEach((color) => {
         for (let i = 1; i <= 13; i++) {
           const id = uuidv4();
-          const tile = (
-            <Tile key={deck.length} value={i} color={color} id={id} />
-          );
+          const tile = <Tile key={id} value={i} color={color} id={id} />;
           deck.push(tile);
         }
       });
@@ -67,14 +65,43 @@ const createHand = (deck: JSX.Element[]): JSX.Element[] => {
   return newHand;
 };
 
-const isPlayersTile = (state: GameType, tile: JSX.Element) => {
+const isPlayersTile = (state: GameType, tileId: string) => {
   const playersHand = state.activePlayer.hand;
-  return playersHand.some((item) => item.props.id === tile.props.id);
+  return playersHand.some((item) => item.props.id === tileId);
 };
 
-const findTileIndexOnBoard = (state: GameType, tile: JSX.Element) => {
+const findTileIndexInHand = (state: GameType, tileId: string) => {
+  const playersHand = state.activePlayer.hand;
+  return playersHand.findIndex((item) => item.props.id === tileId);
+};
+
+const findTileIndexOnBoard = (state: GameType, tileId: string) => {
   const board = state.board;
-  return board.findIndex((item) => item.props.id === tile.props.id);
+  return board.findIndex((item) => item.props.id === tileId);
+};
+
+const moveTileFromHandToBoard = (
+  state: GameType,
+  tileId: string,
+  boardIndex: number
+) => {
+  console.log("check 1");
+  const index = findTileIndexInHand(state, tileId);
+  const tile = state.activePlayer.hand[index];
+  state.activePlayer.hand.splice(index, 1);
+  state.board[boardIndex] = tile;
+};
+
+const moveTileOnBoard = (
+  state: GameType,
+  tileId: string,
+  boardIndex: number
+) => {
+  console.log("check 2");
+  const index = findTileIndexOnBoard(state, tileId);
+  const tile = state.board[index];
+  state.board[boardIndex] = tile;
+  state.board[index] = <Square index={index} key={index} />;
 };
 
 interface GameType {
@@ -107,17 +134,15 @@ export const game = createSlice({
       state.deck.splice(index, 1);
     },
     moveTile: (state, action) => {
-      const { squareIndex, tile } = action.payload;
+      const { squareIndex, tileId } = action.payload;
 
-      if (isPlayersTile(state, tile)) state.board[squareIndex] = tile;
-
-      const previousIndex = findTileIndexOnBoard(state, tile);
-
-      state.board[previousIndex] = (
-        <Square index={previousIndex} key={previousIndex} />
-      );
-      
-      state.board[squareIndex] = tile;
+      // if tile is players tile, move it from hand to board
+      if (isPlayersTile(state, tileId))
+        moveTileFromHandToBoard(state, tileId, squareIndex);
+      // if tile is on board, move it from board to board
+      else {
+        moveTileOnBoard(state, tileId, squareIndex);
+      }
     },
     removeTileFromPlayerHand: (state, action) => {
       const tileId = action.payload;

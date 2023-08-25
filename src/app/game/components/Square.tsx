@@ -17,21 +17,12 @@ export default function Square({ index }: SquareProps) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "tile",
     drop: (tile: TileType) => {
-      const tileId = tile.id;
       dispatch(
         moveTile({
           squareIndex: index,
-          tile: (
-            <Tile
-              key={tileId}
-              value={tile.value}
-              color={tile.color}
-              id={tileId}
-            />
-          ),
+          tileId: tile.id,
         })
       );
-      dispatch(removeTileFromPlayerHand(tileId));
     },
 
     collect: (monitor) => ({
