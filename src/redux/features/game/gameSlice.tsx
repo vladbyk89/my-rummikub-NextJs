@@ -158,6 +158,7 @@ export const game = createSlice({
       // if tile is players tile, move it from hand to board
       if (isPlayersTile(state, tileId))
         moveTileFromHandToBoard(state, tileId, squareIndex);
+
       // if tile is on board, move it from board to board
       else {
         moveTileOnBoard(state, tileId, squareIndex);

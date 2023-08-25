@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import { initiatePlayers } from "@/redux/features/players/playersSlice";
 import { useRouter } from "next/navigation";
-import { createPlayer } from "@/redux/features/game/gameSlice";
+import { createGame } from "@/redux/features/game/gameSlice";
 
 interface FormData {
   playerOne: string;
@@ -30,9 +30,7 @@ export default function PlayersForm() {
 
     const playersArr = Object.values(players).filter((val) => val != "");
 
-    playersArr.forEach((player) =>
-      dispatch(createPlayer({ userName: player }))
-    );
+    dispatch(createGame(playersArr));
 
     router.push("/game");
   };

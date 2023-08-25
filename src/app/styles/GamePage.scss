@@ -4,8 +4,6 @@
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: repeat(11, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
 }
 
 .playersArea {
@@ -70,12 +68,12 @@
   display: grid;
   grid-template-columns: repeat(20, 1fr);
   grid-template-rows: repeat(8, 1fr);
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
-  padding: 5px;
   background-color: #3a5ce4;
+  gap: 3px;
+  padding: 0.5rem;
   div {
-    // box-shadow: 0 0 3px black;
+    box-shadow: 0 0 3px black;
+    border-radius: 10px;
   }
 }
 
@@ -86,7 +84,7 @@
   background-color: #f9e3d1;
   border-radius: 10px;
   span {
-    font-size: 1.5rem;
+    font-size: 2vh;
     font-weight: bold;
     text-shadow: 0 0 10px gray;
   }

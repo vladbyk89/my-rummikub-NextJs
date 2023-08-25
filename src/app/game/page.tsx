@@ -16,21 +16,19 @@ import PlayersSection from "./components/PlayersSection";
 
 // ** redux
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { selectGame, createGame } from "@/redux/features/game/gameSlice";
 
 // ** Types
-import { PlayerType } from "@/redux/features/players/playersSlice";
 import ActivePlayerSection from "./components/ActivePlayerSection";
 
 export default function GamePage() {
   // Hooks
   const dispatch = useAppDispatch();
-  const gameStore = useAppSelector(selectGame);
-  const activePlayer = gameStore.activePlayer;
+  const { activePlayer, players } = useAppSelector(selectGame);
 
   useEffect(() => {
-    if (gameStore.players.length == 0) {
+    if (players.length == 0) {
       const fakePlayers = ["vladb89", "riri96", "ollie21"];
       dispatch(createGame(fakePlayers));
     }
