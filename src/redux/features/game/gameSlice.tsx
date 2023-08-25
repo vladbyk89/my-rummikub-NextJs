@@ -2,6 +2,7 @@ import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
 import Square from "@/app/game/components/Square";
 import Tile from "@/app/game/components/Tile";
+import { v4 as uuidv4 } from "uuid";
 
 export interface PlayerType {
   userName: string;
@@ -14,12 +15,19 @@ const createDeck = () => {
     const deck: JSX.Element[] = [];
 
     for (let j = 1; j < 3; j++) {
-      const jocker = <Tile key={deck.length} value={0} color="purpel" />;
+      const jockerId = uuidv4();
+
+      const jocker = (
+        <Tile key={deck.length} value={0} color="purpel" id={jockerId} />
+      );
       deck.push(jocker);
 
       colors.forEach((color) => {
         for (let i = 1; i <= 13; i++) {
-          const tile = <Tile key={deck.length} value={i} color={color} />;
+          const id = uuidv4();
+          const tile = (
+            <Tile key={deck.length} value={i} color={color} id={id} />
+          );
           deck.push(tile);
         }
       });
@@ -45,31 +53,37 @@ const createEmptyBoard = () => {
 
 const initStateBoard = createEmptyBoard();
 
-const createHand = (deck: JSX.Element[]) => {
+const createHand = (deck: JSX.Element[]): JSX.Element[] => {
   const newHand = [];
+
   for (let i = 0; i < 14; i++) {
     const randomDeckIndex = Math.floor(Math.random() * deck.length);
 
     const tile = deck.at(randomDeckIndex) as JSX.Element;
-
     newHand.push(tile);
 
     deck.splice(randomDeckIndex, 1);
   }
-
   return newHand;
+};
+
+const isPlayersTile = (state: GameType, tile: JSX.Element) => {
+  const playersHand = state.activePlayer.hand;
+  return playersHand.some((item) => item.props.id === tile.props.id);
 };
 
 interface GameType {
   deck: JSX.Element[];
   board: JSX.Element[];
   players: PlayerType[];
+  activePlayer: PlayerType;
 }
 
 const initialState: GameType = {
   deck: initStateDeck,
   board: initStateBoard,
-  players: [{ userName: "", hand: [] }],
+  players: [],
+  activePlayer: { userName: "", hand: [] as JSX.Element[] },
 };
 
 export const game = createSlice({
@@ -81,7 +95,7 @@ export const game = createSlice({
 
       const player = { userName, hand: createHand(state.deck) };
 
-      state.players = [player];
+      state.players.push(player);
     },
     removeTileFromDeck: (state, action) => {
       const index = action.payload;
@@ -89,12 +103,31 @@ export const game = createSlice({
     },
     moveTile: (state, action) => {
       const { squareIndex, tile } = action.payload;
-      state.board[squareIndex] = tile;
+
+      if (isPlayersTile(state, tile)) state.board[squareIndex] = tile;
+
+      
+    },
+    removeTileFromPlayerHand: (state, action) => {
+      const tileId = action.payload;
+      state.activePlayer.hand = state.activePlayer.hand.filter(
+        (tile) => tile.props.id != tileId
+      );
+    },
+    nextPlayer: (state, action) => {
+      const player = action.payload;
+      state.activePlayer = player;
     },
   },
 });
 
-export const { createPlayer } = game.actions;
+export const {
+  createPlayer,
+  removeTileFromDeck,
+  moveTile,
+  nextPlayer,
+  removeTileFromPlayerHand,
+} = game.actions;
 
 export const selectGame = (state: RootState) => state.game;
 

@@ -1,9 +1,9 @@
 import React from "react";
-import { selectBoard } from "@/redux/features/board/boardSlice";
+import { selectGame } from "@/redux/features/game/gameSlice";
 import { useAppSelector } from "@/redux/hooks";
 
 export default function Board() {
-  const boardArr = useAppSelector(selectBoard);
+  const { board } = useAppSelector(selectGame);
 
-  return <section className="gameBoard">{boardArr}</section>;
+  return <section className="gameBoard">{board}</section>;
 }

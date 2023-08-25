@@ -1,9 +1,11 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
-import { moveTile } from "@/redux/features/board/boardSlice";
-import { removeTileFromDeck } from "@/redux/features/deck/deckSlice";
-import { TileType } from "./Tile";
+import {
+  moveTile,
+  removeTileFromPlayerHand,
+} from "@/redux/features/game/gameSlice";
+import Tile, { TileType } from "./Tile";
 
 interface SquareProps {
   index: number;
@@ -14,22 +16,22 @@ export default function Square({ index }: SquareProps) {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "tile",
-    drop: (draggedItem: TileType) => {
+    drop: (tile: TileType) => {
+      const tileId = tile.id;
       dispatch(
         moveTile({
           squareIndex: index,
-          newDiv: (
-            <div
-              key={index}
-              style={{ color: draggedItem.color }}
-              className="tile"
-            >
-              {draggedItem.value}
-            </div>
+          tile: (
+            <Tile
+              key={tileId}
+              value={tile.value}
+              color={tile.color}
+              id={tileId}
+            />
           ),
         })
       );
-      dispatch(removeTileFromDeck(33));
+      dispatch(removeTileFromPlayerHand(tileId))
     },
 
     collect: (monitor) => ({
