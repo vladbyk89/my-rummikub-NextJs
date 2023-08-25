@@ -6,7 +6,10 @@ import { v4 as uuidv4 } from "uuid";
 
 export interface PlayerType {
   userName: string;
-  hand: JSX.Element[];
+  hand: {
+    startHand: JSX.Element[];
+    endHand: JSX.Element[];
+  };
   id: string;
 }
 
@@ -66,13 +69,23 @@ const createHand = (deck: JSX.Element[]): JSX.Element[] => {
   return newHand;
 };
 
+const drawTile = (deck: JSX.Element[], activePlayer: PlayerType) => {
+  const randomDeckIndex = Math.floor(Math.random() * deck.length);
+
+  const tile = deck.at(randomDeckIndex) as JSX.Element;
+
+  activePlayer.hand.endHand.push(tile);
+
+  deck.splice(randomDeckIndex, 1);
+};
+
 const isPlayersTile = (state: GameType, tileId: string) => {
-  const playersHand = state.activePlayer.hand;
+  const playersHand = state.activePlayer.hand.endHand;
   return playersHand.some((item) => item.props.id === tileId);
 };
 
 const findTileIndexInHand = (state: GameType, tileId: string) => {
-  const playersHand = state.activePlayer.hand;
+  const playersHand = state.activePlayer.hand.endHand;
   return playersHand.findIndex((item) => item.key === tileId);
 };
 
@@ -86,8 +99,8 @@ const moveTileFromHandToBoard = (
   boardIndex: number
 ) => {
   const index = findTileIndexInHand(state, tileId);
-  const tile = state.activePlayer.hand[index];
-  state.activePlayer.hand.splice(index, 1);
+  const tile = state.activePlayer.hand.endHand[index];
+  state.activePlayer.hand.endHand.splice(index, 1);
   state.board[boardIndex] = tile;
 };
 
@@ -102,14 +115,26 @@ const moveTileOnBoard = (
   state.board[index] = <Square index={index} key={index} />;
 };
 
-const getNextPlayer = (state: GameType) => {
-  const players = state.players;
-  const activePlayerIndex = players.findIndex(
-    (player) => player.id === state.activePlayer.id
-  );
-
+const getNextPlayer = (players: PlayerType[], activePlayerIndex: number) => {
   if (activePlayerIndex === players.length - 1) return players[0];
   else return players[activePlayerIndex + 1];
+};
+
+const saveActivePlayer = (state: GameType, activePlayerIndex: number) => {
+  state.activePlayer.hand.startHand = state.activePlayer.hand.endHand;
+
+  state.players[activePlayerIndex] = state.activePlayer;
+};
+
+const playerMadeAMove = (state: GameType) => {
+  const startHand = state.activePlayer.hand.startHand;
+  const endHand = state.activePlayer.hand.endHand;
+
+  const isSame =
+    startHand.length === endHand.length &&
+    startHand.every((tile, index) => tile.key === endHand[index].key);
+
+  return !isSame;
 };
 
 interface GameType {
@@ -123,7 +148,7 @@ const initialState: GameType = {
   deck: initStateDeck,
   board: initStateBoard,
   players: [],
-  activePlayer: { userName: "", hand: [], id: "" },
+  activePlayer: { userName: "", hand: { startHand: [], endHand: [] }, id: "" },
 };
 
 export const game = createSlice({
@@ -134,9 +159,13 @@ export const game = createSlice({
       const playersArr = action.payload;
 
       playersArr.forEach((player: string) => {
+        const newHand = createHand(state.deck);
         const newPlayer = {
           userName: player,
-          hand: createHand(state.deck),
+          hand: {
+            startHand: newHand,
+            endHand: newHand,
+          },
           id: uuidv4(),
         };
         state.players.push(newPlayer);
@@ -158,27 +187,33 @@ export const game = createSlice({
       // if tile is players tile, move it from hand to board
       if (isPlayersTile(state, tileId))
         moveTileFromHandToBoard(state, tileId, squareIndex);
-
       // if tile is on board, move it from board to board
       else {
         moveTileOnBoard(state, tileId, squareIndex);
       }
     },
-    moveBoardToHand: (state, action) => {
+    moveFromBoardToHand: (state, action) => {
       const { tileId } = action.payload;
       const index = findTileIndexOnBoard(state, tileId);
       const tile = state.board[index];
       state.board[index] = <Square index={index} key={index} />;
-      state.activePlayer.hand.push(tile);
+      state.activePlayer.hand.endHand.push(tile);
     },
     endActivePlayerTurn: (state) => {
       const activePlayerIndex = state.players.findIndex(
         (player) => player.id === state.activePlayer.id
       );
 
-      state.players[activePlayerIndex] = state.activePlayer;
+      // if player didn't make a move reset his hand draw a tile
+      if (!playerMadeAMove(state)) {
+        state.activePlayer.hand.endHand = state.activePlayer.hand.startHand;
+        drawTile(state.deck, state.activePlayer);
+      }
 
-      state.activePlayer = getNextPlayer(state);
+      // set player in players array to active player
+      saveActivePlayer(state, activePlayerIndex);
+
+      state.activePlayer = getNextPlayer(state.players, activePlayerIndex);
     },
   },
 });
@@ -187,7 +222,7 @@ export const {
   createGame,
   removeTileFromDeck,
   moveTile,
-  moveBoardToHand,
+  moveFromBoardToHand,
   endActivePlayerTurn,
 } = game.actions;
 

@@ -1,10 +1,10 @@
 import React from "react";
-import { PlayerType } from "@/redux/features/players/playersSlice";
+import { PlayerType } from "@/redux/features/game/gameSlice";
 import { useDrop } from "react-dnd";
 import { TileType } from "./Tile";
 import { useAppDispatch } from "@/redux/hooks";
 import {
-  moveBoardToHand,
+  moveFromBoardToHand,
   endActivePlayerTurn,
 } from "@/redux/features/game/gameSlice";
 
@@ -18,7 +18,7 @@ export default function ActivePlayerSection({ activePlayer }: Props) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "tile",
     drop: (tile: TileType) => {
-      dispatch(moveBoardToHand({ tileId: tile.id }));
+      dispatch(moveFromBoardToHand({ tileId: tile.id }));
     },
 
     collect: (monitor) => ({
@@ -26,10 +26,11 @@ export default function ActivePlayerSection({ activePlayer }: Props) {
     }),
   }));
 
+
   return (
     <section className="playerHand" ref={drop}>
       <div className="tiles">
-        {activePlayer ? activePlayer.hand : <>Loading...</>}
+        {activePlayer ? activePlayer.hand.endHand : <>Loading...</>}
       </div>
       <div className="actionButtons">
         <div className="buttonWrapper">
