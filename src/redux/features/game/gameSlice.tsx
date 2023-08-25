@@ -194,6 +194,13 @@ export const game = createSlice({
     },
     moveFromBoardToHand: (state, action) => {
       const { tileId } = action.payload;
+
+      // Check if tile belonged to player at start of the turn, if not do not allow to take.
+      if (
+        !state.activePlayer.hand.startHand.some((tile) => tile.key === tileId)
+      )
+        return alert("Not your tile to take");
+
       const index = findTileIndexOnBoard(state, tileId);
       const tile = state.board[index];
       state.board[index] = <Square index={index} key={index} />;
