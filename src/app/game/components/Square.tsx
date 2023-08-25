@@ -31,7 +31,7 @@ export default function Square({ index }: SquareProps) {
           ),
         })
       );
-      dispatch(removeTileFromPlayerHand(tileId))
+      dispatch(removeTileFromPlayerHand(tileId));
     },
 
     collect: (monitor) => ({

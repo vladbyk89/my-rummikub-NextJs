@@ -72,6 +72,11 @@ const isPlayersTile = (state: GameType, tile: JSX.Element) => {
   return playersHand.some((item) => item.props.id === tile.props.id);
 };
 
+const findTileIndexOnBoard = (state: GameType, tile: JSX.Element) => {
+  const board = state.board;
+  return board.findIndex((item) => item.props.id === tile.props.id);
+};
+
 interface GameType {
   deck: JSX.Element[];
   board: JSX.Element[];
@@ -106,7 +111,13 @@ export const game = createSlice({
 
       if (isPlayersTile(state, tile)) state.board[squareIndex] = tile;
 
+      const previousIndex = findTileIndexOnBoard(state, tile);
+
+      state.board[previousIndex] = (
+        <Square index={previousIndex} key={previousIndex} />
+      );
       
+      state.board[squareIndex] = tile;
     },
     removeTileFromPlayerHand: (state, action) => {
       const tileId = action.payload;

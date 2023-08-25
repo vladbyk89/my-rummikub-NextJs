@@ -8,7 +8,7 @@ export interface TileType {
   id: string;
 }
 
-export default function Tile({ value, color, id,  }: TileType) {
+export default function Tile({ value, color, id }: TileType) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "tile",
     item: { value, color, id },

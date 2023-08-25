@@ -7,6 +7,7 @@ import "../styles/Buttons.scss";
 // ** React DND
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 
 // ** Custom components
 import Board from "./components/Board";
@@ -26,7 +27,6 @@ import {
 import { PlayerType } from "@/redux/features/players/playersSlice";
 
 export default function GamePage() {
-
   // Hooks
   const dispatch = useAppDispatch();
   const gameStore = useAppSelector(selectGame);
@@ -41,7 +41,6 @@ export default function GamePage() {
       const randomPlayer = gameStore.players[randomPlayerIndex];
 
       dispatch(nextPlayer(randomPlayer));
-
     }
   }, [gameStore.players]);
 
