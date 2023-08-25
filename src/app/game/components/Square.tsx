@@ -32,7 +32,7 @@ export default function Square({ index }: SquareProps) {
       ref={drop}
       id={String(index)}
       className="square"
-      style={{ backgroundColor: isOver ? "yellow" : "pink" }}
+      style={{ backgroundColor: isOver ? "yellow" : "" }}
     ></div>
   );
 }

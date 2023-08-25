@@ -12,16 +12,12 @@ import { TouchBackend } from "react-dnd-touch-backend";
 // ** Custom components
 import Board from "./components/Board";
 import Tile from "./components/Tile";
-import PlayerSection from "./components/PlayerSection";
+import PlayersSection from "./components/PlayersSection";
 
 // ** redux
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
-import {
-  createPlayer,
-  selectGame,
-  nextPlayer,
-} from "@/redux/features/game/gameSlice";
+import { selectGame, createGame } from "@/redux/features/game/gameSlice";
 
 // ** Types
 import { PlayerType } from "@/redux/features/players/playersSlice";
@@ -34,20 +30,15 @@ export default function GamePage() {
   const activePlayer = gameStore.activePlayer;
 
   useEffect(() => {
-    if (gameStore.players.length == 0)
-      dispatch(createPlayer({ userName: "vladb89" }));
-    else {
-      const amountOfPlayers = gameStore.players.length;
-      const randomPlayerIndex = Math.floor(Math.random() * amountOfPlayers);
-      const randomPlayer = gameStore.players[randomPlayerIndex];
-
-      dispatch(nextPlayer(randomPlayer));
+    if (gameStore.players.length == 0) {
+      const fakePlayers = ["vladb89", "riri96", "ollie21"];
+      dispatch(createGame(fakePlayers));
     }
-  }, [gameStore.players]);
+  }, []);
 
   return (
     <main className="gamePage">
-      <PlayerSection />
+      <PlayersSection />
       <DndProvider backend={HTML5Backend}>
         <ActivePlayerSection activePlayer={activePlayer} />
         <Board />

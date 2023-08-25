@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 export interface PlayerType {
   userName: string;
   hand: JSX.Element[];
+  id: string;
 }
 
 const createDeck = () => {
@@ -101,6 +102,16 @@ const moveTileOnBoard = (
   state.board[index] = <Square index={index} key={index} />;
 };
 
+const getNextPlayer = (state: GameType) => {
+  const players = state.players;
+  const activePlayerIndex = players.findIndex(
+    (player) => player.id === state.activePlayer.id
+  );
+
+  if (activePlayerIndex === players.length - 1) return players[0];
+  else return players[activePlayerIndex + 1];
+};
+
 interface GameType {
   deck: JSX.Element[];
   board: JSX.Element[];
@@ -112,20 +123,31 @@ const initialState: GameType = {
   deck: initStateDeck,
   board: initStateBoard,
   players: [],
-  activePlayer: { userName: "", hand: [] as JSX.Element[] },
+  activePlayer: { userName: "", hand: [], id: "" },
 };
 
 export const game = createSlice({
   name: "game",
   initialState,
   reducers: {
-    createPlayer: (state, action) => {
-      const { userName } = action.payload;
+    createGame: (state, action) => {
+      const playersArr = action.payload;
 
-      const player = { userName, hand: createHand(state.deck) };
+      playersArr.forEach((player: string) => {
+        const newPlayer = {
+          userName: player,
+          hand: createHand(state.deck),
+          id: uuidv4(),
+        };
+        state.players.push(newPlayer);
+      });
 
-      state.players.push(player);
+      const randomPlayerIndex = Math.floor(Math.random() * playersArr.length);
+      const randomPlayer = state.players[randomPlayerIndex];
+
+      state.activePlayer = randomPlayer;
     },
+
     removeTileFromDeck: (state, action) => {
       const index = action.payload;
       state.deck.splice(index, 1);
@@ -148,19 +170,24 @@ export const game = createSlice({
       state.board[index] = <Square index={index} key={index} />;
       state.activePlayer.hand.push(tile);
     },
-    nextPlayer: (state, action) => {
-      const player = action.payload;
-      state.activePlayer = player;
+    endActivePlayerTurn: (state) => {
+      const activePlayerIndex = state.players.findIndex(
+        (player) => player.id === state.activePlayer.id
+      );
+
+      state.players[activePlayerIndex] = state.activePlayer;
+
+      state.activePlayer = getNextPlayer(state);
     },
   },
 });
 
 export const {
-  createPlayer,
+  createGame,
   removeTileFromDeck,
   moveTile,
-  nextPlayer,
   moveBoardToHand,
+  endActivePlayerTurn,
 } = game.actions;
 
 export const selectGame = (state: RootState) => state.game;

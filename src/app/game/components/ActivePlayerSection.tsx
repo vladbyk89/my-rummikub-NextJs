@@ -3,7 +3,10 @@ import { PlayerType } from "@/redux/features/players/playersSlice";
 import { useDrop } from "react-dnd";
 import { TileType } from "./Tile";
 import { useAppDispatch } from "@/redux/hooks";
-import { moveBoardToHand } from "@/redux/features/game/gameSlice";
+import {
+  moveBoardToHand,
+  endActivePlayerTurn,
+} from "@/redux/features/game/gameSlice";
 
 interface Props {
   activePlayer: PlayerType;
@@ -39,7 +42,12 @@ export default function ActivePlayerSection({ activePlayer }: Props) {
           <button className="buttonStyleTwo">RESET</button>
         </div>
         <div className="buttonWrapper">
-          <button className="buttonStyleTwo">End turn</button>
+          <button
+            onClick={() => dispatch(endActivePlayerTurn())}
+            className="buttonStyleTwo"
+          >
+            End turn
+          </button>
         </div>
       </div>
     </section>
