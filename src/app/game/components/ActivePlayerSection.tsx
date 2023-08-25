@@ -3,6 +3,7 @@ import { PlayerType } from "@/redux/features/players/playersSlice";
 import { useDrop } from "react-dnd";
 import { TileType } from "./Tile";
 import { useAppDispatch } from "@/redux/hooks";
+import { moveBoardToHand } from "@/redux/features/game/gameSlice";
 
 interface Props {
   activePlayer: PlayerType;
@@ -13,7 +14,9 @@ export default function ActivePlayerSection({ activePlayer }: Props) {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "tile",
-    drop: (tile: TileType) => {},
+    drop: (tile: TileType) => {
+      dispatch(moveBoardToHand({ tileId: tile.id }));
+    },
 
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -26,10 +29,18 @@ export default function ActivePlayerSection({ activePlayer }: Props) {
         {activePlayer ? activePlayer.hand : <>Loading...</>}
       </div>
       <div className="actionButtons">
-        <button className="buttonStyleTwo">123</button>
-        <button className="buttonStyleTwo">777</button>
-        <button className="buttonStyleTwo">RESET</button>
-        <button className="buttonStyleTwo">End turn</button>
+        <div className="buttonWrapper">
+          <button className="buttonStyleTwo">123</button>
+        </div>
+        <div className="buttonWrapper">
+          <button className="buttonStyleTwo">777</button>
+        </div>
+        <div className="buttonWrapper">
+          <button className="buttonStyleTwo">RESET</button>
+        </div>
+        <div className="buttonWrapper">
+          <button className="buttonStyleTwo">End turn</button>
+        </div>
       </div>
     </section>
   );

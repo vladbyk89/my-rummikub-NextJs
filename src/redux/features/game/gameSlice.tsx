@@ -72,12 +72,11 @@ const isPlayersTile = (state: GameType, tileId: string) => {
 
 const findTileIndexInHand = (state: GameType, tileId: string) => {
   const playersHand = state.activePlayer.hand;
-  return playersHand.findIndex((item) => item.props.id === tileId);
+  return playersHand.findIndex((item) => item.key === tileId);
 };
 
 const findTileIndexOnBoard = (state: GameType, tileId: string) => {
-  const board = state.board;
-  return board.findIndex((item) => item.props.id === tileId);
+  return state.board.findIndex((item) => item.key === tileId);
 };
 
 const moveTileFromHandToBoard = (
@@ -142,8 +141,12 @@ export const game = createSlice({
         moveTileOnBoard(state, tileId, squareIndex);
       }
     },
-    moveBoardToHand:(state, action) => {
-
+    moveBoardToHand: (state, action) => {
+      const { tileId } = action.payload;
+      const index = findTileIndexOnBoard(state, tileId);
+      const tile = state.board[index];
+      state.board[index] = <Square index={index} key={index} />;
+      state.activePlayer.hand.push(tile);
     },
     nextPlayer: (state, action) => {
       const player = action.payload;
@@ -157,6 +160,7 @@ export const {
   removeTileFromDeck,
   moveTile,
   nextPlayer,
+  moveBoardToHand,
 } = game.actions;
 
 export const selectGame = (state: RootState) => state.game;

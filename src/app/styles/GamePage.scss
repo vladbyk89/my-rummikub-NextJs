@@ -29,8 +29,8 @@
   border: 1px solid black;
   grid-area: 9 / 2 / 12 / 12;
   display: flex;
+  background-color: #3a5ce4;
   .tiles {
-    border-right: 1px solid red;
     width: 80%;
     height: 100%;
     display: grid;
@@ -47,6 +47,17 @@
     grid-template-rows: repeat(2, 1fr);
     gap: 1rem;
     padding: 0.5rem;
+    .buttonWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      button {
+        width: 100%;
+        height: 100%;
+        max-height: 50px;
+        max-width: 100px;
+      }
+    }
   }
 }
 
@@ -68,4 +79,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f9e3d1;
+  span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px gray;
+  }
 }

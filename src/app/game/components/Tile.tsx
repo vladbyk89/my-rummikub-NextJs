@@ -24,10 +24,10 @@ export default function Tile({ value, color, id }: TileType) {
       className={`tile square ${isDragging ? "dragging" : ""}`}
       style={{
         color: `${color}`,
-        backgroundColor: isDragging ? "yellow" : "pink",
+        backgroundColor: isDragging ? "yellow" : "#F9E3D1",
       }}
     >
-      {value}
+      <span>{value}</span>
     </div>
   );
 }
