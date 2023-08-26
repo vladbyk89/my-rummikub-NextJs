@@ -32,6 +32,7 @@ export interface PlayerType {
   id: string;
 }
 export interface GameType {
+  id: string;
   deck: JSX.Element[];
   board: {
     startTurn: JSX.Element[];
@@ -53,6 +54,7 @@ const initStateBoard = {
 };
 
 const initialState: GameType = {
+  id: "",
   deck: initStateDeck,
   board: initStateBoard,
   players: [],

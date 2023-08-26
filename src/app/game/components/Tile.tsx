@@ -31,7 +31,7 @@ export default function Tile({ value, color, id }: TileType) {
       {value !== 0 ? (
         <span>{value}</span>
       ) : (
-        <Icon icon="game-icons:card-joker" style={{ fontSize: "5vh" }} />
+        <Icon icon="game-icons:card-joker" />
       )}
     </div>
   );

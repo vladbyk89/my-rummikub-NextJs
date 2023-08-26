@@ -15,6 +15,7 @@ export default function PlayersSection() {
             boxShadow: activePlayerId === player.id ? "0 0 10px 5px white" : "",
           }}
           key={index}
+          className="player"
         >
           {player.userName}
         </div>
