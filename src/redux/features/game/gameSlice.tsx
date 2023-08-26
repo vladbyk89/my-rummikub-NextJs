@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import Square from "@/app/game/components/Square";
 import Tile from "@/app/game/components/Tile";
 import { v4 as uuidv4 } from "uuid";
+import validateBoard from "./gameValidation";
 
 export interface PlayerType {
   userName: string;
@@ -34,7 +35,6 @@ const createDeck = () => {
         }
       });
     }
-
     return deck;
   } catch (error) {
     console.error(error);
@@ -49,7 +49,6 @@ const createEmptyBoard = () => {
   for (let i = 0; i < 160; i++) {
     boardArr.push(<Square index={i} key={i} />);
   }
-
   return boardArr;
 };
 
@@ -140,7 +139,7 @@ const playerMadeAMove = (state: GameType) => {
   return !isSame;
 };
 
-interface GameType {
+export interface GameType {
   deck: JSX.Element[];
   board: {
     startTurn: JSX.Element[];
@@ -213,6 +212,8 @@ export const game = createSlice({
       state.activePlayer.hand.endHand.push(tile);
     },
     endActivePlayerTurn: (state) => {
+      if (!validateBoard(state)) return;
+      
       const activePlayerIndex = state.players.findIndex(
         (player) => player.id === state.activePlayer.id
       );

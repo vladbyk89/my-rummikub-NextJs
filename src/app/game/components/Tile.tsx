@@ -21,7 +21,7 @@ export default function Tile({ value, color, id }: TileType) {
     <div
       id={id}
       ref={drag}
-      className={`tile square ${isDragging ? "dragging" : ""}`}
+      className={`tile ${isDragging ? "dragging" : ""}`}
       style={{
         color: `${color}`,
         backgroundColor: isDragging ? "yellow" : "#F9E3D1",
