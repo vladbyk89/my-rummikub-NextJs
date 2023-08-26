@@ -30,14 +30,14 @@ export default function validateBoard(state: GameType) {
           validBoard = false;
         }
 
-        // if (tileArr.find((tile) => tile.color === "jocker")) {
-        //   if (!validSetWithJocker(tileArr)) {
-        //     validBoard = false;
-        //   }
-        // }
+        if (set.find((tile) => tile.props.color === "purple")) {
+          if (!validSetWithJocker(set)) {
+            validBoard = false;
+          }
+        }
 
         // if set isn't same color then check that it is a valid group (7red, 7green, 7blue)
-        if (!isSameColor(set)) {
+        else if (!isSameColor(set)) {
           if (!isValidGroup(set)) {
             alert("Not valid group.");
             validBoard = false;
@@ -110,3 +110,65 @@ export const playerMadeAMove = (state: GameType) => {
 
   return startHand.length !== endHand.length;
 };
+
+function validSetWithJocker(tileArr: JSX.Element[]) {
+  try {
+    let isValid = true;
+
+    if (isSameColor(tileArr.filter((tile) => tile.props.color !== "purple"))) {
+      console.log("check 1");
+      if (!isValidRunWithJocker(tileArr)) isValid = false;
+    } else {
+      if (!isValidGroupWithJocker(tileArr)) isValid = false;
+    }
+    return isValid;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function isValidRunWithJocker(tileArr: JSX.Element[]) {
+  try {
+    let jockerValue = 0;
+    return tileArr
+      .map((tile) => tile.props.value)
+      .reduce((a, b) => {
+        if (b === 0) {
+          jockerValue = a + 1;
+          return jockerValue;
+        }
+        if (a === 0) {
+          return b;
+        }
+        return a + 1 === b ? b : NaN;
+      });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function isValidGroupWithJocker(tileArr: JSX.Element[]) {
+  try {
+    if (tileArr.length > 4) {
+      return false;
+    }
+
+    if (
+      !tileArr
+        .filter((tile) => tile.props.color !== "purple")
+        .map((tile) => tile.props.value)
+        .reduce((a, b) => (a === b ? a : NaN))
+    ) {
+      return false;
+    }
+
+    const stringArr = tileArr.map(
+      (tile) => tile.props.value + tile.props.color
+    );
+    const setArr = Array.from(new Set(stringArr));
+
+    return setArr.length === stringArr.length;
+  } catch (error) {
+    console.error(error);
+  }
+}
