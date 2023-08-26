@@ -98,3 +98,15 @@ function isValidRun(tileArr: JSX.Element[]) {
     .map((tile) => tile.props.value)
     .reduce((a, b) => (a + 1 === b ? b : NaN));
 }
+
+export const isPlayersTile = (state: GameType, tileId: string) => {
+  const playersHand = state.activePlayer.hand.endHand;
+  return playersHand.some((item) => item.props.id === tileId);
+};
+
+export const playerMadeAMove = (state: GameType) => {
+  const startHand = state.activePlayer.hand.startHand;
+  const endHand = state.activePlayer.hand.endHand;
+
+  return startHand.length !== endHand.length;
+};

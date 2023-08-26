@@ -1,9 +1,26 @@
 import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
+
+// ** Custom components
 import Square from "@/app/game/components/Square";
-import Tile from "@/app/game/components/Tile";
+
+// ** Third party imports
 import { v4 as uuidv4 } from "uuid";
-import validateBoard from "./gameValidation";
+
+// ** Functions
+import validateBoard, {
+  isPlayersTile,
+  playerMadeAMove,
+} from "./gameValidation";
+import { createDeck, createEmptyBoard, createHand } from "./createFunctions";
+import {
+  drawTile,
+  findTileIndexOnBoard,
+  getNextPlayer,
+  moveTileFromHandToBoard,
+  moveTileOnBoard,
+  saveActivePlayer,
+} from "./gameActions";
 
 export interface PlayerType {
   userName: string;
@@ -13,132 +30,6 @@ export interface PlayerType {
   };
   id: string;
 }
-
-const createDeck = () => {
-  try {
-    const colors = ["black", "red", "blue", "green"];
-    const deck: JSX.Element[] = [];
-
-    for (let j = 1; j < 3; j++) {
-      const jockerId = uuidv4();
-
-      const jocker = (
-        <Tile key={jockerId} value={0} color="purpel" id={jockerId} />
-      );
-      deck.push(jocker);
-
-      colors.forEach((color) => {
-        for (let i = 1; i <= 13; i++) {
-          const id = uuidv4();
-          const tile = <Tile key={id} value={i} color={color} id={id} />;
-          deck.push(tile);
-        }
-      });
-    }
-    return deck;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
-
-const initStateDeck = createDeck();
-
-const createEmptyBoard = () => {
-  const boardArr = [];
-  for (let i = 0; i < 160; i++) {
-    boardArr.push(<Square index={i} key={i} />);
-  }
-  return boardArr;
-};
-
-const initStateBoard = {
-  startTurn: createEmptyBoard(),
-  endTurn: createEmptyBoard(),
-};
-
-const createHand = (deck: JSX.Element[]): JSX.Element[] => {
-  const newHand = [];
-
-  for (let i = 0; i < 14; i++) {
-    const randomDeckIndex = Math.floor(Math.random() * deck.length);
-
-    const tile = deck.at(randomDeckIndex) as JSX.Element;
-    newHand.push(tile);
-
-    deck.splice(randomDeckIndex, 1);
-  }
-  return newHand;
-};
-
-const drawTile = (deck: JSX.Element[], activePlayer: PlayerType) => {
-  const randomDeckIndex = Math.floor(Math.random() * deck.length);
-
-  const tile = deck.at(randomDeckIndex) as JSX.Element;
-
-  activePlayer.hand.endHand.push(tile);
-
-  deck.splice(randomDeckIndex, 1);
-};
-
-const isPlayersTile = (state: GameType, tileId: string) => {
-  const playersHand = state.activePlayer.hand.endHand;
-  return playersHand.some((item) => item.props.id === tileId);
-};
-
-const findTileIndexInHand = (state: GameType, tileId: string) => {
-  const playersHand = state.activePlayer.hand.endHand;
-  return playersHand.findIndex((item) => item.key === tileId);
-};
-
-const findTileIndexOnBoard = (state: GameType, tileId: string) => {
-  return state.board.endTurn.findIndex((item) => item.key === tileId);
-};
-
-const moveTileFromHandToBoard = (
-  state: GameType,
-  tileId: string,
-  boardIndex: number
-) => {
-  const index = findTileIndexInHand(state, tileId);
-  const tile = state.activePlayer.hand.endHand[index];
-  state.activePlayer.hand.endHand.splice(index, 1);
-  state.board.endTurn[boardIndex] = tile;
-};
-
-const moveTileOnBoard = (
-  state: GameType,
-  tileId: string,
-  boardIndex: number
-) => {
-  const index = findTileIndexOnBoard(state, tileId);
-  const tile = state.board.endTurn[index];
-  state.board.endTurn[boardIndex] = tile;
-  state.board.endTurn[index] = <Square index={index} key={index} />;
-};
-
-const getNextPlayer = (players: PlayerType[], activePlayerIndex: number) => {
-  if (activePlayerIndex === players.length - 1) return players[0];
-  else return players[activePlayerIndex + 1];
-};
-
-const saveActivePlayer = (state: GameType, activePlayerIndex: number) => {
-  state.activePlayer.hand.startHand = state.activePlayer.hand.endHand;
-
-  state.players[activePlayerIndex] = state.activePlayer;
-};
-
-const playerMadeAMove = (state: GameType) => {
-  const startHand = state.activePlayer.hand.startHand;
-  const endHand = state.activePlayer.hand.endHand;
-
-  const isSame =
-    startHand.length === endHand.length &&
-    startHand.every((tile, index) => tile.key === endHand[index].key);
-
-  return !isSame;
-};
-
 export interface GameType {
   deck: JSX.Element[];
   board: {
@@ -148,6 +39,13 @@ export interface GameType {
   players: PlayerType[];
   activePlayer: PlayerType;
 }
+
+const initStateDeck = createDeck();
+
+const initStateBoard = {
+  startTurn: createEmptyBoard(),
+  endTurn: createEmptyBoard(),
+};
 
 const initialState: GameType = {
   deck: initStateDeck,
