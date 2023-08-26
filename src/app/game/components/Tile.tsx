@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useDrag } from "react-dnd";
+import { Icon } from "@iconify/react";
 
 export interface TileType {
   value: number;
@@ -21,13 +22,17 @@ export default function Tile({ value, color, id }: TileType) {
     <div
       id={id}
       ref={drag}
-      className={`tile ${isDragging ? "dragging" : ""}`}
+      className="tile"
       style={{
         color: `${color}`,
-        backgroundColor: isDragging ? "yellow" : "#F9E3D1",
+        visibility: isDragging ? "hidden" : "visible",
       }}
     >
-      <span>{value}</span>
+      {value !== 0 ? (
+        <span>{value}</span>
+      ) : (
+        <Icon icon="game-icons:card-joker" style={{ fontSize: "5vh" }} />
+      )}
     </div>
   );
 }

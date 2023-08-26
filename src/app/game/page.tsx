@@ -11,7 +11,6 @@ import { TouchBackend } from "react-dnd-touch-backend";
 
 // ** Custom components
 import Board from "./components/Board";
-import Tile from "./components/Tile";
 import PlayersSection from "./components/PlayersArea";
 
 // ** redux

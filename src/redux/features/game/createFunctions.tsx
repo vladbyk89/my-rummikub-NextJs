@@ -10,7 +10,6 @@ export const createEmptyBoard = () => {
   return boardArr;
 };
 
-
 export const createHand = (deck: JSX.Element[]): JSX.Element[] => {
   const newHand = [];
 
@@ -34,7 +33,7 @@ export const createDeck = () => {
       const jockerId = uuidv4();
 
       const jocker = (
-        <Tile key={jockerId} value={0} color="purpel" id={jockerId} />
+        <Tile key={jockerId} value={0} color="purple" id={jockerId} />
       );
       deck.push(jocker);
 

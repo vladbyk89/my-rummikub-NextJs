@@ -89,3 +89,9 @@
     text-shadow: 0 0 10px gray;
   }
 }
+
+.tile:hover {
+  cursor: pointer;
+  // background-color: red;
+  transform: scale(1.1);
+}
