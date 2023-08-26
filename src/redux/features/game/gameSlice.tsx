@@ -16,7 +16,7 @@ export interface PlayerType {
 
 const createDeck = () => {
   try {
-    const colors = ["black", "red", "blue", "yellow"];
+    const colors = ["black", "red", "blue", "green"];
     const deck: JSX.Element[] = [];
 
     for (let j = 1; j < 3; j++) {
@@ -213,7 +213,7 @@ export const game = createSlice({
     },
     endActivePlayerTurn: (state) => {
       if (!validateBoard(state)) return;
-      
+
       const activePlayerIndex = state.players.findIndex(
         (player) => player.id === state.activePlayer.id
       );
