@@ -5,9 +5,9 @@ import "../styles/GamePage.scss";
 import "../styles/Buttons.scss";
 
 // ** React DND
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { TouchBackend } from "react-dnd-touch-backend";
+// import { DndProvider } from "react-dnd";
+// import { HTML5Backend } from "react-dnd-html5-backend";
+// import { TouchBackend } from "react-dnd-touch-backend";
 
 // ** Custom components
 import Board from "./components/Board";
@@ -40,10 +40,8 @@ export default function GamePage() {
   ) : (
     <main className="gamePage">
       <PlayersSection />
-      <DndProvider backend={HTML5Backend}>
         <ActivePlayerSection activePlayer={activePlayer} />
         <Board />
-      </DndProvider>
     </main>
   );
 }

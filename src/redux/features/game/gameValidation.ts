@@ -116,7 +116,6 @@ function validSetWithJocker(tileArr: JSX.Element[]) {
     let isValid = true;
 
     if (isSameColor(tileArr.filter((tile) => tile.props.color !== "purple"))) {
-      console.log("check 1");
       if (!isValidRunWithJocker(tileArr)) isValid = false;
     } else {
       if (!isValidGroupWithJocker(tileArr)) isValid = false;

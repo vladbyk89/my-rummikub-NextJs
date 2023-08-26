@@ -1,9 +1,10 @@
 .gamePage {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: repeat(11, 1fr);
+  background-color: #3a5ce4;
 }
 
 .playersArea {
@@ -15,7 +16,8 @@
   align-items: center;
   padding: 0.5rem;
   div {
-    border: 1px solid blue;
+    border: 1px solid white;
+    color: #f9e3d1;
     border-radius: 50%;
     width: 100%;
     max-width: 120px;
@@ -69,8 +71,8 @@
   grid-template-columns: repeat(20, 1fr);
   grid-template-rows: repeat(8, 1fr);
   background-color: #3a5ce4;
-  gap: 3px;
-  padding: 0.5rem;
+  gap: 0.5rem;
+  padding: 0.3rem;
   div {
     box-shadow: 0 0 3px black;
     border-radius: 10px;

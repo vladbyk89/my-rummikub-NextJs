@@ -12,7 +12,7 @@ export default function PlayersSection() {
       {gameStore.players.map((player, index) => (
         <div
           style={{
-            boxShadow: activePlayerId === player.id ? "0 0 10px red" : "",
+            boxShadow: activePlayerId === player.id ? "0 0 10px 5px white" : "",
           }}
           key={index}
         >

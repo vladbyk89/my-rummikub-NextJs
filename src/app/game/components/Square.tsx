@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
