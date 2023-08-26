@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 
 // ** Functions
 import validateBoard, {
+  checkIfPlayerWon,
   isPlayersTile,
   playerMadeAMove,
 } from "./gameValidation";
@@ -38,6 +39,10 @@ export interface GameType {
   };
   players: PlayerType[];
   activePlayer: PlayerType;
+  gameOver: {
+    winner: PlayerType;
+    isOver: boolean;
+  };
 }
 
 const initStateDeck = createDeck();
@@ -52,6 +57,10 @@ const initialState: GameType = {
   board: initStateBoard,
   players: [],
   activePlayer: { userName: "", hand: { startHand: [], endHand: [] }, id: "" },
+  gameOver: {
+    winner: { userName: "", hand: { startHand: [], endHand: [] }, id: "" },
+    isOver: false,
+  },
 };
 
 export const game = createSlice({
@@ -88,8 +97,16 @@ export const game = createSlice({
       const { squareIndex, tileId } = action.payload;
 
       // if tile is players tile, move it from hand to board
-      if (isPlayersTile(state, tileId))
+      if (isPlayersTile(state, tileId)) {
         moveTileFromHandToBoard(state, tileId, squareIndex);
+
+        // Check if player won
+        if (checkIfPlayerWon(state)) {
+          state.gameOver.winner = state.activePlayer;
+          state.gameOver.isOver = true;
+        }
+      }
+
       // if tile is on board, move it from board to board
       else {
         moveTileOnBoard(state, tileId, squareIndex);

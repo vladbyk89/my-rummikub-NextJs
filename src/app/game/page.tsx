@@ -24,7 +24,7 @@ import ActivePlayerSection from "./components/ActivePlayerSection";
 export default function GamePage() {
   // Hooks
   const dispatch = useAppDispatch();
-  const { activePlayer, players } = useAppSelector(selectGame);
+  const { activePlayer, players, gameOver } = useAppSelector(selectGame);
 
   useEffect(() => {
     if (players.length == 0) {
@@ -33,7 +33,11 @@ export default function GamePage() {
     }
   }, []);
 
-  return (
+  return gameOver.isOver ? (
+    <div className="gameOverPage">
+      The Winner is: {gameOver.winner.userName}
+    </div>
+  ) : (
     <main className="gamePage">
       <PlayersSection />
       <DndProvider backend={HTML5Backend}>

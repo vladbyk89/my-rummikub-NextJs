@@ -172,3 +172,10 @@ function isValidGroupWithJocker(tileArr: JSX.Element[]) {
     console.error(error);
   }
 }
+
+export const checkIfPlayerWon = (state: GameType) => {
+  if (state.activePlayer.hand.endHand.length === 0 && validateBoard(state)) {
+    return true;
+  }
+  return false;
+};
