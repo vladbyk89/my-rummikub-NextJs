@@ -42,7 +42,7 @@ export default function GamePage() {
 
 	useEffect(() => {
 		if (players.length == 0) {
-			const fakePlayers = ['vladb89', 'riri96', 'ollie21'];
+			const fakePlayers = ['vladb89', 'riri96', 'ollie21', 'misty'];
 			dispatch(gameActions.createGame(fakePlayers));
 		} else {
 			// console.log(store);

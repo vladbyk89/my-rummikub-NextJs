@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+//NextJs
+import { useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 import React from 'react';
 
@@ -10,7 +11,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function ProfileLink() {
+	const router = useRouter();
+
 	const dispatch = useAppDispatch();
+
 	const [currrentUser, setCurrentUser] = useState({
 		username: '',
 		email: '',
@@ -36,15 +40,17 @@ export default function ProfileLink() {
 	}, [dispatch]);
 
 	return (
-		<Link
-			href={
-				currrentUser.username
-					? `/profile/${currrentUser.username}`
-					: '/login'
-			}
+		<div
 			className='userProfileLink'
+			onClick={() =>
+				router.push(
+					currrentUser.username
+						? `/profile/${currrentUser.username}`
+						: '/login'
+				)
+			}
 		>
 			<Icon icon='ei:user' className='linkIcon' />
-		</Link>
+		</div>
 	);
 }

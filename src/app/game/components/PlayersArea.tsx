@@ -1,7 +1,13 @@
 import React from 'react';
 
+// Redux
 import { useAppSelector } from '@/redux/hooks';
 import { selectGame } from '@/redux/features/game/gameSlice';
+
+// Nextjs
+import { useRouter } from 'next/navigation';
+
+// Third party imports
 import { ArrowLeftToLine } from 'lucide-react';
 
 // Style
@@ -11,12 +17,11 @@ export default function PlayersSection() {
 	const gameStore = useAppSelector(selectGame);
 	const activePlayerId = gameStore.activePlayer.id;
 
+	const router = useRouter();
+
 	return (
 		<section className='playersArea'>
-			<button
-				className='exitButton'
-				style={{ position: 'absolute', top: 5, left: 0}}
-			>
+			<button className='exitButton' onClick={() => router.push('/')}>
 				<ArrowLeftToLine color='white' />
 				Exit
 			</button>

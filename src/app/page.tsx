@@ -7,9 +7,9 @@ export default function Home() {
 	return (
 		<main className='mainHome'>
 			<ProfileLink />
-			<button className='buttonStyleOne'>
-				<Link href='/game'>Play Now</Link>
-			</button>
+			<Link href='/game'>
+				<button className='buttonStyleOne'>Play Now</button>
+			</Link>
 		</main>
 	);
 }
