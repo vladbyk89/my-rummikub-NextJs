@@ -1,8 +1,13 @@
 "use client";
-
 import React from "react";
+
+// Third party imports
 import { useDrop } from "react-dnd";
+
+// Types
 import { TileType } from "./Tile";
+
+// Redux 
 import { useAppDispatch } from "@/redux/hooks";
 import { gameActions, PlayerType } from "@/redux/features/game/gameSlice";
 

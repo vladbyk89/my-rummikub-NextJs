@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Profile() {
-  const router = useRouter();
+	const router = useRouter();
 
-  useEffect(() => {
-    const getUserData = async () => {
-      const { data } = await axios.get("/api/users/userData");
-      console.log(data);
+	useEffect(() => {
+		const getUserData = async () => {
+			const { data } = await axios.get('/api/users/userData');
+			console.log(data);
 
-      const userName = await data.user.username;
+			const userName = await data.user.username;
 
-      console.log(userName);
-      router.push(`profile/${userName}`);
-    };
+			console.log(userName);
+			router.push(`profile/${userName}`);
+		};
 
-    getUserData();
-  }, []);
-  return <h1>Profile</h1>;
+		getUserData();
+	}, [router]);
+	return <h1>Profile</h1>;
 }

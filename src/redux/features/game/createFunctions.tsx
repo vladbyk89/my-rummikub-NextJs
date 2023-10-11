@@ -4,7 +4,7 @@ import Square from "@/app/game/components/Square";
 
 export const createEmptyBoard = () => {
   const boardArr = [];
-  for (let i = 0; i < 160; i++) {
+  for (let i = 0; i < 161; i++) {
     boardArr.push(<Square index={i} key={i} />);
   }
   return boardArr;

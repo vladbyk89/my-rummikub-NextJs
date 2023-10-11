@@ -1,5 +1,4 @@
 import { GameType } from "./gameSlice";
-import { TileType } from "@/app/game/components/Tile";
 
 export default function validateBoard(state: GameType) {
   const board = state.board.endTurn;
